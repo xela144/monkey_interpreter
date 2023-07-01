@@ -1,0 +1,72 @@
+package token
+
+type TokenType string
+
+type Token struct {
+    Type TokenType
+    Literal string
+}
+
+const (
+    ILLEGAL = "ILLEGAL"
+    EOF = "EOF"
+
+    // identifies and literals
+    IDENT = "IDENT"
+    INT = "INT"
+
+
+    // operators
+    ASSIGN = "="
+    PLUS = "+"
+    MINUS    = "-"
+    BANG     = "!"
+    ASTERISK = "*"
+    SLASH    = "/"
+
+    LT = "<"
+    GT = ">"
+    EQ = "=="
+    NEQ = "!="
+
+    // delimiters
+    COMMA = ","
+    SEMICOLON = ";"
+
+    LPAREN = "("
+    RPAREN = ")"
+    LBRACE = "{"
+    RBRACE = "}"
+
+    // keywords
+    FUNCTION = "FUNCTION"
+    LET = "LET"
+    TRUE = "TRUE"
+    FALSE = "FALSE"
+    IF = "IF"
+    ELSE = "ELSE"
+    RETURN = "RETURN"
+
+)
+
+
+// Define the language keywords
+var keywords = map[string]TokenType{
+    "fn": FUNCTION,
+    "let": LET,
+    "true": TRUE,
+    "false": FALSE,
+    "if": IF,
+    "else": ELSE,
+    "return": RETURN,
+}
+
+
+// Check whether an identifier is a keyword. If it is, return its TokenType
+// Otherwise, return token.IDENT
+func LookupIdent(ident string) TokenType {
+    if tok, ok := keywords[ident]; ok{
+        return tok
+    }
+    return IDENT
+}
