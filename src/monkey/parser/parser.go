@@ -158,6 +158,8 @@ func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
 }
 
 func (p *Parser) parseExpressionStatement() *ast.ExpressionStatement {
+    // Create an AST out of of the expression, starting with LOWEST precedence so that
+    // we bind to nothing while starting out.
     stmt := &ast.ExpressionStatement{Token: p.curToken}
     stmt.Expression = p.parseExpression(LOWEST)
 
@@ -175,7 +177,8 @@ func (p *Parser) noPrefixParseFnError(t token.TokenType) {
 
 
 func (p *Parser) parseExpression(precedence int) ast.Expression {
-    // The heart of the Pratt Parser
+    // The heart of the Pratt Parser. Here the precedence can be LOWEST when we are beginning
+    // parse the expression, or it can be whatever the previous caller's precedence was.
     prefix := p.prefixParseFns[p.curToken.Type]
     if prefix == nil {
         p.noPrefixParseFnError(p.curToken.Type)
@@ -218,6 +221,18 @@ func (p *Parser) parseInfixExpression(left ast.Expression) ast.Expression {
 
     precedence := p.curPrecedence()
     p.nextToken()
+
+
+    // If we wanted to make "+" associate to the right, we could do the following:
+    if false {
+        if expression.Operator == "+" {
+            // Decrement the precedence so that "+" becomes right-associative
+            expression.Right = p.parseExpression(precedence - 1)
+        } else {
+            expression.Right = p.parseExpression(precedence)
+        }
+    }
+
     expression.Right = p.parseExpression(precedence)
 
     return expression
