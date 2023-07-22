@@ -3,6 +3,7 @@ package ast
 import (
     "monkey/token"
     "bytes"
+    "strings"
 )
 
 
@@ -163,3 +164,27 @@ type Boolean struct {
 func (b *Boolean) expressionNode()      {}
 func (b *Boolean) TokenLiteral() string { return b.Token.Literal }
 func (b *Boolean) String() string       { return b.Token.Literal }
+
+type CallExpression struct{
+    Token token.Token
+    Function Expression
+    Arguments []Expression
+}
+func (ce *CallExpression) expressionNode() {}
+func (ce *CallExpression) TokenLiteral() string { return ce.TokenLiteral() }
+func (ce *CallExpression) String() string {
+    var out bytes.Buffer
+
+    args := []string{}
+
+    for _, a := range ce.Arguments {
+        args = append(args, a.String())
+    }
+
+    out.WriteString(ce.Function.String())
+    out.WriteString("(")
+    out.WriteString(strings.Join(args, ", "))
+    out.WriteString(")")
+
+    return out.String()
+}
