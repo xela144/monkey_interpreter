@@ -191,6 +191,7 @@ func (p *Parser) parseExpression(precedence int) ast.Expression {
     }
 
     leftExp := prefix()
+    // Walk forwards while parsing tokens of lesser precedence
     for !p.peekTokenIs(token.SEMICOLON) && precedence < p.peekPrecedence() {
         infix := p.infixParseFns[p.peekToken.Type]
         if infix == nil {
@@ -229,14 +230,12 @@ func (p *Parser) parseInfixExpression(left ast.Expression) ast.Expression {
 
 
     // If we wanted to make "+" associate to the right, we could do the following:
-    if false {
-        if expression.Operator == "+" {
-            // Decrement the precedence so that "+" becomes right-associative
-            expression.Right = p.parseExpression(precedence - 1)
-        } else {
-            expression.Right = p.parseExpression(precedence)
-        }
-    }
+    // if expression.Operator == "+" {
+    //     // Decrement the precedence so that "+" becomes right-associative
+    //     expression.Right = p.parseExpression(precedence - 1)
+    // } else {
+    //     expression.Right = p.parseExpression(precedence)
+    // }
 
     expression.Right = p.parseExpression(precedence)
 
