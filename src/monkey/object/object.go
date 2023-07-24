@@ -29,5 +29,5 @@ func (b *Boolean) Type() ObjectType { return BOOLEAN_OBJ }
 func (b *Boolean) Inspect() string { return fmt.Sprintf("%t", b.Value) }
 
 type Null struct {}
-func (n *Null) Type() string { return NULL_OBJ }
-func (n *Null) Inspect() string { return "null" }
+func (n *Null) Type() ObjectType { return NULL_OBJ }
+func (n *Null) Inspect() string  { return "null" }
