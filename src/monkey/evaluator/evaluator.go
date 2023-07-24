@@ -69,6 +69,14 @@ func evalInfixExpression(operator string, left, right object.Object) object.Obje
     switch {
     case left.Type() == object.INTEGER_OBJ && right.Type() == object.INTEGER_OBJ:
         return evalIntegerInfixExpression(operator, left, right)
+
+    // For the next two cases, we can't use Monkey objects, instead use Go's equality test.
+    // "Monkey's object system doesn't allow for pointer comparison of integer objects"
+    case operator == "==":
+        return nativeBoolToBooleanObject(left == right)
+    case operator == "!=":
+        return nativeBoolToBooleanObject(left != right)
+
     default:
         return NULL
     }
@@ -108,6 +116,14 @@ func evalIntegerInfixExpression(operator string, left, right object.Object) obje
         return &object.Integer{Value: leftVal * rightVal}
     case "/":
         return &object.Integer{Value: leftVal / rightVal}
+    case "<":
+        return nativeBoolToBooleanObject(leftVal < rightVal)
+    case ">":
+        return nativeBoolToBooleanObject(leftVal > rightVal)
+    case "==":
+        return nativeBoolToBooleanObject(leftVal == rightVal)
+    case "!=":
+        return nativeBoolToBooleanObject(leftVal != rightVal)
     default:
         return NULL
     }
